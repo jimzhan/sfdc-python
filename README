@@ -1,0 +1,7 @@
+Partner based WebServices Python API sets
+
+Dependencies
+========================================
+SFDC Version 14.0 for Winter '09 (Partner)
+python-2.5.2
+lxml-2.1.3
