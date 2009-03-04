@@ -978,58 +978,58 @@ class Request(object):
 
             @return: Compressed raw XML data in string format.
         """
-         buffer = StringIO()
-         zdata = GzipFile(
-             mode = 'wb',
-             fileobj = buffer,
-             compresslevel = http.compresslevel
-         )
-         zdata.write(data)
-         zdata.close()
-         return buffer.getvalue()
+        buffer = StringIO()
+        zdata = GzipFile(
+            mode = 'wb',
+            fileobj = buffer,
+            compresslevel = http.compresslevel
+        )
+        zdata.write(data)
+        zdata.close()
+        return buffer.getvalue()
 
 
-     def decompress(self, data):
-         """ Decompress the compressed data.
+    def decompress(self, data):
+        """ Decompress the compressed data.
 
-             @param data: Compressed raw XML data. 
+            @param data: Compressed raw XML data. 
 
-             @type data: <gzip.GzipFile>
+            @type data: <gzip.GzipFile>
 
-             @return: Decompressed raw XML data in string format.
-         """
-         zdata = GzipFile(fileobj=StringIO(data))
-         return zdata.read()
-
-
-     def __str__(self):
-         """ Constructed XML message, mainly for debug. """
-         return etree.tostring(
-             self.xml,
-             xml_declaration = True,
-             encoding = self.encoding,
-             pretty_print = self.debug
-         )
+            @return: Decompressed raw XML data in string format.
+        """
+        zdata = GzipFile(fileobj=StringIO(data))
+        return zdata.read()
 
 
-     def __repr__(self):
-         """ Constructed XML message, used to request from server. """
-         data = etree.tostring(
-             self.xml,
-             xml_declaration = True,
-             encoding = self.encoding
-         )
-         if self.debug:
-             self.headers['Accept-Encoding'] = 'identity'
-             if self.headers.has_key('Content-Encoding'):
-                 del self.headers['Content-Encoding']
-         else:
-             data = self.compress(data)
-             self.headers['Accept-Encoding'] = self.compressType
-             self.headers['Content-Encoding'] = self.compressType   
+    def __str__(self):
+        """ Constructed XML message, mainly for debug. """
+        return etree.tostring(
+            self.xml,
+            xml_declaration = True,
+            encoding = self.encoding,
+            pretty_print = self.debug
+        )
 
-         self.headers['Content-Length'] = len(data)
-         return data
+
+    def __repr__(self):
+        """ Constructed XML message, used to request from server. """
+        data = etree.tostring(
+            self.xml,
+            xml_declaration = True,
+            encoding = self.encoding
+        )
+        if self.debug:
+            self.headers['Accept-Encoding'] = 'identity'
+            if self.headers.has_key('Content-Encoding'):
+                del self.headers['Content-Encoding']
+        else:
+            data = self.compress(data)
+            self.headers['Accept-Encoding'] = self.compressType
+            self.headers['Content-Encoding'] = self.compressType   
+
+        self.headers['Content-Length'] = len(data)
+        return data
 
 
 class AuthenticatedRequest(Request):
